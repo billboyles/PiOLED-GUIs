@@ -37,11 +37,11 @@ _Note: These instructions are also provided in more detail, with screenshots, in
 
 #### PiOLED_128x32_simple_stats-1.py
 
-+This file requires the `mpstats` command. To install, use `sudo apt-get install sysstat`.
++ This file requires the `mpstats` command. To install, use `sudo apt-get install sysstat`.
 
 #### PiOLED_128x32_simple_stats-animated-1.py
 
-+This file requires the `mpstats` command. To install, use `sudo apt-get install sysstat`.
++ This file requires the `mpstats` command. To install, use `sudo apt-get install sysstat`.
 
-+This file uses the **'Open 24 Display St'** font from [DaFont](https://dafont.com). On the site, this font is marked as free for personal and non-commercial use and has hence been included in this project. However, check with the font creator for questions about whether the license covers your use case. The font may need to be installed in the system. Doing so is beyond the sdcope of this guide, but instructions can be found [here](https://www.unixtutorial.org/how-to-install-ttf-fonts-in-linux/). To use a different font, replace the filename after `font=` in line 53 of the code: `font = ImageFont.truetype(font='/home/pi/GUIs/Open 24 Display St.ttf', size=30)`.
++ This file uses the **'Open 24 Display St'** font from [DaFont](https://dafont.com). On the site, this font is marked as free for personal and non-commercial use and has hence been included in this project. However, check with the font creator for questions about whether the license covers your use case. The font may need to be installed in the system. Doing so is beyond the sdcope of this guide, but instructions can be found [here](https://www.unixtutorial.org/how-to-install-ttf-fonts-in-linux/). To use a different font, replace the filename after `font=` in line 53 of the code: `font = ImageFont.truetype(font='/home/pi/GUIs/Open 24 Display St.ttf', size=30)`.
 
