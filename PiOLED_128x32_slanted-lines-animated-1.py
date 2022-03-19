@@ -113,3 +113,4 @@ while True:
         disp.image(image)
         disp.show()
         time.sleep(speed)
+        
