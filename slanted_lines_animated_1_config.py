@@ -15,3 +15,6 @@ SPEED  = 0.001
 
 #font
 FONT_FILE = '/home/pi/Alien-Encounters-Solid-Italic.ttf'
+
+#display stats
+DISPLAY_STATS = True

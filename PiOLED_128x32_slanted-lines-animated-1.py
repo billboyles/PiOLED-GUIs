@@ -14,6 +14,7 @@ line_space = slanted_lines_animated_1_config.LINE_SPACE
 slantiness = slanted_lines_animated_1_config.SLANTINESS
 speed = slanted_lines_animated_1_config.SPEED
 font_file = slanted_lines_animated_1_config.FONT_FILE
+display_stats = slanted_lines_animated_1_config.DISPLAY_STATS
 
 #create i2c interface
 i2c = busio.I2C(SCL, SDA)
@@ -46,18 +47,40 @@ bottom = height - padding
 
 font = ImageFont.truetype(font=font_file, size=44)
 
-#get hostname info
-cmd = "hostname"
-NAME = subprocess.check_output(cmd, shell=True).decode("utf-8")
-text_length = font.getsize(NAME)[0]
-text_height = font.getsize(NAME)[1]
-
-#calculate needed overflow
-margin_fudge =  0 - (slantiness * 2) - ((line_width * line_number) + (line_space * (line_number - 1))) - text_length
-text_fudge = (height - text_height) / 2
-
 #display loop
 while True:
+
+    #get hostname info
+    cmd = "hostname"
+    NAME = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
+
+    if display_stats:
+
+        #shell scripts for monitoring
+        cmd = "mpstat | awk 'NR==4{printf \"%s\", $13}'"
+        CPU = str(100 - round(float(subprocess.check_output(cmd, shell=True).decode("utf-8")))).strip()
+        CPU = CPU.replace("%", "")
+        cmd = "free -m | awk 'NR==2{printf \"%2.0f%%\", $3*100/$2 }'"
+        MEM = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
+        MEM = MEM.replace("%", "")
+        cmd = "df -H | awk 'NR==2{printf \"%s\", $5}'"
+        DISK = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
+        DISK = DISK.replace("%", "")
+        cmd = "vcgencmd measure_temp | awk -F'[\=\.]' '{printf \"%2s\", $2}'"
+        TEMP = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
+        TEMP = TEMP.replace("%", "")
+
+        text = f"{NAME}     TEMP: {TEMP} C     CPU: {CPU}     MEM: {MEM}     DISK: {DISK}     "
+
+    else:
+        text = NAME
+
+    text_length = font.getsize(text)[0]
+    text_height = font.getsize(text)[1]
+
+    #calculate needed overflow
+    margin_fudge =  0 - (slantiness * 2) - ((line_width * line_number) + (line_space * (line_number - 1))) - text_length
+    text_fudge = (height - text_height) / 2
 
     for n in range(132, margin_fudge, -4):
 
@@ -81,8 +104,10 @@ while True:
             
             #draw.polygon([((n + x), top), ((n + x - slantiness), (top + 32)), ((n + x), (top + 32))], fill=255, outline=None)
 
+        #print(text)
+
         #write text
-        draw.text(((n + x - 15), top + text_fudge), NAME, font=font, fill=255)
+        draw.text(((n + x - 15), top + text_fudge), text, font=font, fill=255)
 
         #display image
         disp.image(image)

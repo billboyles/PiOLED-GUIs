@@ -54,7 +54,7 @@ _Note: These instructions are also provided in more detail, with screenshots, in
 
 + This file uses the **Alien Encounters Solid Italic** font from [DaFont](https://www.dafont.com/alien-encounters.font). 
 
-+ This file has a configuration file, `slanted_lines_animated_1_config.py`,  which must be included with the GUI and allows the number of lines, the width of the lines, the width of the spacing between lines, the speed of the scrolling, and the font. 
++ This file has a configuration file, `slanted_lines_animated_1_config.py`,  which must be included with the GUI and allows the number of lines, the width of the lines, the width of the spacing between lines, the speed of the scrolling, the font, and whther to display stats or only the hostname. 
 
 
 ## A Note On Fonts

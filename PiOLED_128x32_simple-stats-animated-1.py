@@ -85,8 +85,8 @@ while True:
         #write text
         draw.text((n, top), NAME, font=font, fill=255)
         draw.text((n + 300, top), f"CPU: {CPU}%", font=font, fill=255)
-        draw.text((n + 600, top), f"MEM: {MEM}", font=font, fill=255)
-        draw.text((n + 900, top), f"DISK: {DISK}", font=font, fill=255)
+        draw.text((n + 600, top), f"MEM: {MEM}%", font=font, fill=255)
+        draw.text((n + 900, top), f"DISK: {DISK}%", font=font, fill=255)
         draw.text((n + 1200, top), f"TEMP: {TEMP}° C", font=font, fill=255)
 
         #wait 1 sec after each item
