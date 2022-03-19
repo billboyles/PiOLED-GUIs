@@ -1,11 +1,4 @@
-# SPDX-FileCopyrightText: 2017 Tony DiCola for Adafruit Industries
-# SPDX-FileCopyrightText: 2017 James DeVito for Adafruit Industries
-# SPDX-License-Identifier: MIT
-
-# This example is for use on (Linux) computers that are using CPython with
-# Adafruit Blinka to support CircuitPython libraries. CircuitPython does
-# not support PIL/pillow (python imaging library)!
-
+#import modules
 import time
 import subprocess
 
@@ -15,54 +8,50 @@ from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
 
 
-# Create the I2C interface.
+#create i2c interface
 i2c = busio.I2C(SCL, SDA)
 
-# Create the SSD1306 OLED class.
-# The first two parameters are the pixel width and pixel height.  Change these
-# to the right size for your display!
+#create OLED class
 disp = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
 
-# Clear display.
+#clear display
 disp.fill(0)
 disp.show()
 
-# Create blank image for drawing.
-# Make sure to create image with mode '1' for 1-bit color.
+#create blank images for drawing and rotating
 width = disp.width
 height = disp.height
 image1 = Image.new("1", (width, height))
 image2 = Image.new("1", (width, height))
 
-# Get drawing object to draw on image.
+#get drawing image
 draw = ImageDraw.Draw(image2)
 
-# Draw a black filled box to clear the image.
+#clear screen
 draw.rectangle((0, 0, width, height), outline=0, fill=0)
 
-# Draw some shapes.
-# First define some constants to allow easy resizing of shapes.
+#origin and padding
 padding = -2
 top = padding
 bottom = height - padding
-# Move left to right keeping track of the current x position for drawing shapes.
-x = 0
 
 
-# Load default font.
-font = ImageFont.truetype(font='/home/pi/GUIs/Open 24 Display St.ttf', size=30)
+#load font - change font file name to use a different font
+#font file must be in same dir as script
+font = ImageFont.truetype(font='/home/pi/Open 24 Display St.ttf', size=30)
 
+#get hostname info
+cmd = "hostname"
+NAME = subprocess.check_output(cmd, shell=True).decode("utf-8")
+
+#display loop
 while True:
         
     #clear image
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
 
-    #get info
-    cmd = "hostname"
-    NAME = subprocess.check_output(cmd, shell=True).decode("utf-8")
-
     #write text
-    draw.text((x, top + 0), NAME, font=font, fill=255)
+    draw.text((x, top), NAME, font=font, fill=255)
     
     #rotate image by increments
     for n in range(180, 365, 5):
@@ -74,8 +63,10 @@ while True:
         disp.show()
         time.sleep(0.01)
     
+    #wait 1 sec
     time.sleep(1)
 
+    #shell scripts for monitoring
     cmd = "mpstat | awk 'NR==4{printf \"%s\", $13}'"
     CPU = str(100 - round(float(subprocess.check_output(cmd, shell=True).decode("utf-8")))).strip()
     cmd = "free -m | awk 'NR==2{printf \"%2.0f%%\", $3*100/$2 }'"
@@ -85,6 +76,7 @@ while True:
     cmd = "vcgencmd measure_temp | awk -F'[\=\.]' '{printf \"%2s\", $2}'"
     TEMP = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
 
+    #scroll text across screen
     for n in range(0, -1500, -15):
 
         #clear image
@@ -97,10 +89,11 @@ while True:
         draw.text((n + 900, top), f"DISK: {DISK}", font=font, fill=255)
         draw.text((n + 1200, top), f"TEMP: {TEMP}° C", font=font, fill=255)
 
+        #wait 1 sec after each item
         if n % 300== 0:
             time.sleep(1)
 
-        # Display image.
+        #display image
         disp.image(image2)
         disp.show()
         time.sleep(0.01)
